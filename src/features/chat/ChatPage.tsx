@@ -74,7 +74,7 @@ export function ChatPage() {
           display: 'grid',
           gap: 2,
           gridTemplateColumns: { xs: '1fr', md: '280px 1fr' },
-          height: { xs: 'auto', md: 'calc(100dvh - 220px)' },
+          height: { xs: 'auto', md: 'calc(100dvh - 280px)' },
           minHeight: { md: 420 },
         }}
       >
@@ -137,8 +137,14 @@ export function ChatPage() {
               helperText={texto.length > MAX_CARACTERES - 200 ? `${texto.length}/${MAX_CARACTERES}` : undefined}
             />
             <IconButton
-              color="primary"
               aria-label="Enviar mensaje"
+              sx={{
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
+                borderRadius: '10px',
+                '&:hover': { bgcolor: 'primary.light' },
+                '&.Mui-disabled': { bgcolor: 'action.disabledBackground', color: 'action.disabled' },
+              }}
               onClick={() => void manejarEnvio()}
               disabled={!mensajeEnviable}
             >

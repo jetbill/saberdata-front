@@ -1,7 +1,7 @@
 import { Alert, Box, Paper, Skeleton, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
 import { PieChart } from '@mui/x-charts/PieChart'
 import { useMemo, useState } from 'react'
+import { colores } from '../../app/theme'
 import { describirError } from '../../api/client'
 import type { Agrupacion } from '../../api/tipos'
 import { GraficoAgrupacion } from './GraficoAgrupacion'
@@ -20,7 +20,6 @@ const pct = (n: number) => `${n.toLocaleString('es-CO', { maximumFractionDigits:
 
 /** Contenedor: pide los datos con los hooks y se los pasa a componentes que solo dibujan. */
 export function DashboardPage() {
-  const theme = useTheme()
   const [agrupacion, setAgrupacion] = useState<Agrupacion>('estrato')
 
   const resumen = useResumen()
@@ -58,14 +57,16 @@ export function DashboardPage() {
           titulo="Rendimiento alto"
           valor={r?.rendimientoAlto}
           detalle={r ? pct(r.porcentajeAlto) : undefined}
-          color={theme.palette.success.main}
+          color={colores.alto}
+          porcentaje={r?.porcentajeAlto}
           cargando={resumen.isPending}
         />
         <TarjetaKpi
           titulo="Rendimiento bajo"
           valor={r?.rendimientoBajo}
           detalle={r ? pct(r.porcentajeBajo) : undefined}
-          color={theme.palette.error.main}
+          color={colores.bajo}
+          porcentaje={r?.porcentajeBajo}
           cargando={resumen.isPending}
         />
       </Box>
@@ -84,8 +85,8 @@ export function DashboardPage() {
                   paddingAngle: 2,
                   cornerRadius: 4,
                   data: [
-                    { id: 'alto', label: 'Alto', value: r.rendimientoAlto, color: theme.palette.success.main },
-                    { id: 'bajo', label: 'Bajo', value: r.rendimientoBajo, color: theme.palette.error.main },
+                    { id: 'alto', label: 'Alto', value: r.rendimientoAlto, color: colores.alto },
+                    { id: 'bajo', label: 'Bajo', value: r.rendimientoBajo, color: colores.bajo },
                   ],
                 },
               ]}

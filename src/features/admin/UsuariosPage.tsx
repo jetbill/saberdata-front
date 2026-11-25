@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import { describirError } from '../../api/client'
+import { Insignia } from '../../components/Insignia'
 import { useUsuarios } from './useUsuarios'
 
 const formatoFecha = new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short' })
@@ -72,12 +73,7 @@ export function UsuariosPage() {
                     />
                   </TableCell>
                   <TableCell>
-                    <Chip
-                      size="small"
-                      label={u.activo ? 'Activo' : 'Inactivo'}
-                      color={u.activo ? 'success' : 'default'}
-                      variant="outlined"
-                    />
+                    <Insignia texto={u.activo ? 'Activo' : 'Inactivo'} tono={u.activo ? 'azul' : 'naranja'} />
                   </TableCell>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>{formatoFecha.format(new Date(u.creadoEn))}</TableCell>
                 </TableRow>

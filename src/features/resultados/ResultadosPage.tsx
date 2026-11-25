@@ -1,7 +1,6 @@
 import {
   Alert,
   Box,
-  Chip,
   Paper,
   Skeleton,
   Stack,
@@ -17,19 +16,20 @@ import {
 import { useState } from 'react'
 import { describirError } from '../../api/client'
 import type { FiltrosResultados, Resultado } from '../../api/tipos'
+import { Insignia } from '../../components/Insignia'
 import { BarraFiltros } from './BarraFiltros'
 import { useOpcionesFiltros, useResultados } from './useResultados'
 
 const TAMANOS = [10, 20, 50, 100]
 
-const COLUMNAS: { titulo: string; valor: (r: Resultado) => string }[] = [
+const COLUMNAS: { titulo: string; valor: (r: Resultado) => string; siNo?: boolean }[] = [
   { titulo: 'ID', valor: (r) => String(r.id) },
   { titulo: 'Género', valor: (r) => r.genero },
   { titulo: 'Depto. residencia', valor: (r) => r.deptoResidencia },
   { titulo: 'Estrato', valor: (r) => r.estrato },
   { titulo: 'Educación madre', valor: (r) => r.educacionMadre },
-  { titulo: 'Internet', valor: (r) => r.tieneInternet },
-  { titulo: 'Computador', valor: (r) => r.tieneComputador },
+  { titulo: 'Internet', valor: (r) => r.tieneInternet, siNo: true },
+  { titulo: 'Computador', valor: (r) => r.tieneComputador, siNo: true },
   { titulo: 'Naturaleza', valor: (r) => r.naturalezaColegio },
   { titulo: 'Jornada', valor: (r) => r.jornada },
   { titulo: 'Depto. colegio', valor: (r) => r.deptoColegio },
@@ -60,20 +60,18 @@ export function ResultadosPage() {
         </Typography>
       </Box>
 
-      <Paper variant="outlined" sx={{ p: 2 }}>
-        <BarraFiltros
-          filtros={filtros}
-          opciones={opciones}
-          onChange={cambiarFiltro}
-          onLimpiar={() => setFiltros((f) => ({ page: 0, size: f.size }))}
-        />
-      </Paper>
+      <BarraFiltros
+        filtros={filtros}
+        opciones={opciones}
+        onChange={cambiarFiltro}
+        onLimpiar={() => setFiltros((f) => ({ page: 0, size: f.size }))}
+      />
 
       {error && <Alert severity="error">{error}</Alert>}
 
       <Paper variant="outlined">
         <TableContainer sx={{ opacity: consulta.isPlaceholderData ? 0.6 : 1, transition: 'opacity .15s' }}>
-          <Table size="small" aria-label="Resultados Saber 11">
+          <Table size="small" aria-label="Resultados Saber 11" sx={{ minWidth: 960 }}>
             <TableHead>
               <TableRow>
                 {COLUMNAS.map((c) => (
@@ -97,15 +95,17 @@ export function ResultadosPage() {
                 <TableRow key={r.id} hover>
                   {COLUMNAS.map((c) => (
                     <TableCell key={c.titulo} sx={{ whiteSpace: 'nowrap' }}>
-                      {c.valor(r)}
+                      {c.siNo ? (
+                        <Insignia texto={c.valor(r)} tono={c.valor(r).toLowerCase() === 'si' ? 'azul' : 'naranja'} />
+                      ) : (
+                        c.valor(r)
+                      )}
                     </TableCell>
                   ))}
                   <TableCell>
-                    <Chip
-                      size="small"
-                      label={r.rendimiento === 'ALTO' ? 'Alto' : 'Bajo'}
-                      color={r.rendimiento === 'ALTO' ? 'success' : 'error'}
-                      variant="outlined"
+                    <Insignia
+                      texto={r.rendimiento === 'ALTO' ? 'Alto' : 'Bajo'}
+                      tono={r.rendimiento === 'ALTO' ? 'azul' : 'naranja'}
                     />
                   </TableCell>
                 </TableRow>

@@ -30,7 +30,7 @@ export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(crearQueryClient)
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      <CssBaseline enableColorScheme />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <AuthProvider>{children}</AuthProvider>

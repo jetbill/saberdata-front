@@ -1,26 +1,12 @@
 import AdminIcon from '@mui/icons-material/AdminPanelSettings'
-import ChatIcon from '@mui/icons-material/Chat'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import LogoutIcon from '@mui/icons-material/Logout'
-import MenuIcon from '@mui/icons-material/Menu'
+import ChatIcon from '@mui/icons-material/ChatBubbleOutlined'
+import DashboardIcon from '@mui/icons-material/SpaceDashboardOutlined'
 import SchoolIcon from '@mui/icons-material/School'
-import TableIcon from '@mui/icons-material/TableChart'
-import {
-  AppBar,
-  Box,
-  Button,
-  Chip,
-  Container,
-  IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-  Stack,
-  Toolbar,
-  Typography,
-} from '@mui/material'
-import { useState, type ReactNode } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router'
+import TableIcon from '@mui/icons-material/TableChartOutlined'
+import { Box, ButtonBase, Typography } from '@mui/material'
+import type { ReactNode } from 'react'
+import { NavLink, Outlet } from 'react-router'
+import { colores } from '../app/theme'
 import { useAuth } from '../features/auth/useAuth'
 
 interface ItemMenu {
@@ -37,89 +23,119 @@ const ITEMS: ItemMenu[] = [
   { ruta: '/admin/usuarios', etiqueta: 'Usuarios', icono: <AdminIcon fontSize="small" />, soloAdmin: true },
 ]
 
-/** Marco de las pantallas con sesión: barra superior con navegación, usuario y salida. */
+/**
+ * Marco de las pantallas con sesión: barra lateral con marca y navegación, y una franja
+ * superior con el usuario y la salida. En pantallas estrechas la barra lateral pasa a ser
+ * una franja horizontal sobre el contenido.
+ */
 export function AppShell() {
   const { usuario, esAdmin, logout } = useAuth()
-  const navigate = useNavigate()
-  const [ancla, setAncla] = useState<HTMLElement | null>(null)
   const items = ITEMS.filter((i) => !i.soloAdmin || esAdmin)
 
   return (
-    <Box sx={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
-      <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Toolbar sx={{ gap: 1 }}>
-          <SchoolIcon color="primary" />
-          <Typography variant="h6" component="span" sx={{ fontWeight: 600, mr: 2 }}>
+    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' }, minHeight: '100dvh' }}>
+      <Box
+        component="aside"
+        sx={{
+          bgcolor: colores.lateral,
+          borderRight: { md: `1px solid ${colores.linea}` },
+          borderBottom: { xs: `1px solid ${colores.linea}`, md: 0 },
+          p: { xs: '12px 16px', md: '24px 16px' },
+          display: 'flex',
+          flexDirection: { xs: 'row', md: 'column' },
+          flexWrap: { xs: 'wrap', md: 'nowrap' },
+          alignItems: { xs: 'center', md: 'stretch' },
+          gap: 0.75,
+          position: { md: 'sticky' },
+          top: 0,
+          height: { md: '100dvh' },
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, px: 1.25, pb: { md: 2.5 }, mr: { xs: 1, md: 0 } }}>
+          <SchoolIcon sx={{ color: colores.azul }} />
+          <Typography component="span" sx={{ fontWeight: 800, fontSize: 18 }}>
             SaberData
           </Typography>
+        </Box>
 
-          {/* Navegación en pantallas medianas y grandes */}
-          <Stack direction="row" spacing={0.5} sx={{ display: { xs: 'none', sm: 'flex' }, flexGrow: 1 }}>
-            {items.map((i) => (
-              <Button
-                key={i.ruta}
-                component={NavLink}
-                to={i.ruta}
-                end={i.ruta === '/'}
-                startIcon={i.icono}
-                color="inherit"
-                sx={{ '&.active': { color: 'primary.main', bgcolor: 'action.selected' } }}
-              >
-                {i.etiqueta}
-              </Button>
-            ))}
-          </Stack>
-
-          <Box sx={{ flexGrow: { xs: 1, sm: 0 } }} />
-
-          <Chip
-            size="small"
-            label={`${usuario?.username ?? ''}${esAdmin ? ' · ADMIN' : ''}`}
-            sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
-          />
-          <Button
-            color="inherit"
-            onClick={logout}
-            startIcon={<LogoutIcon />}
-            sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+        {items.map((i) => (
+          <ButtonBase
+            key={i.ruta}
+            component={NavLink}
+            to={i.ruta}
+            end={i.ruta === '/'}
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              gap: 1.5,
+              px: 1.5,
+              py: 1.375,
+              borderRadius: '10px',
+              fontFamily: 'inherit',
+              fontSize: 14,
+              fontWeight: 600,
+              color: 'text.secondary',
+              '&:hover': { bgcolor: '#151c25', color: 'text.primary' },
+              '&.active': { bgcolor: colores.azulFondo, color: colores.azul },
+            }}
           >
+            {i.icono}
+            {i.etiqueta}
+          </ButtonBase>
+        ))}
+      </Box>
+
+      <Box sx={{ minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+        <Box
+          component="header"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            gap: 1.5,
+            px: { xs: 2, md: 5 },
+            py: 1.25,
+            borderBottom: `1px solid ${colores.linea}`,
+            fontSize: 13,
+            fontWeight: 600,
+          }}
+        >
+          <Box
+            aria-hidden
+            sx={{
+              width: 30,
+              height: 30,
+              borderRadius: '50%',
+              bgcolor: '#1b2a3a',
+              color: colores.azul,
+              display: 'grid',
+              placeItems: 'center',
+              fontSize: 12,
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              flexShrink: 0,
+            }}
+          >
+            {usuario?.username.charAt(0)}
+          </Box>
+          <Box component="span" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {usuario?.username}
+            {esAdmin && (
+              <Box component="span" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                {' · ADMIN'}
+              </Box>
+            )}
+          </Box>
+          <ButtonBase onClick={logout} sx={{ fontFamily: 'inherit', fontSize: 13, fontWeight: 500, color: 'text.secondary' }}>
             Salir
-          </Button>
+          </ButtonBase>
+        </Box>
 
-          {/* Menú desplegable en móvil */}
-          <IconButton
-            aria-label="Abrir menú"
-            onClick={(e) => setAncla(e.currentTarget)}
-            sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu anchorEl={ancla} open={Boolean(ancla)} onClose={() => setAncla(null)}>
-            {items.map((i) => (
-              <MenuItem
-                key={i.ruta}
-                onClick={() => {
-                  setAncla(null)
-                  navigate(i.ruta)
-                }}
-              >
-                <ListItemIcon>{i.icono}</ListItemIcon>
-                {i.etiqueta}
-              </MenuItem>
-            ))}
-            <MenuItem onClick={logout}>
-              <ListItemIcon>
-                <LogoutIcon fontSize="small" />
-              </ListItemIcon>
-              Salir ({usuario?.username})
-            </MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
-
-      <Container component="main" maxWidth="lg" sx={{ flexGrow: 1, py: { xs: 2, sm: 4 } }}>
-        <Outlet />
-      </Container>
+        <Box component="main" sx={{ minWidth: 0, flexGrow: 1, p: { xs: 2, md: '32px 40px 56px' } }}>
+          <Outlet />
+        </Box>
+      </Box>
     </Box>
   )
 }

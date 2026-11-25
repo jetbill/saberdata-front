@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add'
 import { Button, List, ListItemButton, ListItemText, Skeleton, Stack, Typography } from '@mui/material'
 import type { Conversacion } from '../../api/tipos'
+import { colores } from '../../app/theme'
 
 /** Presentacional: lista de conversaciones con el botón de crear una nueva. */
 export function ListaConversaciones({
@@ -20,7 +21,17 @@ export function ListaConversaciones({
 }) {
   return (
     <Stack spacing={1} sx={{ height: '100%', minHeight: 0 }}>
-      <Button variant="outlined" startIcon={<AddIcon />} onClick={onNueva} disabled={deshabilitada}>
+      <Button
+        startIcon={<AddIcon />}
+        onClick={onNueva}
+        disabled={deshabilitada}
+        sx={{
+          color: colores.azul,
+          bgcolor: colores.azulFondo,
+          border: `1px solid ${colores.azulBorde}`,
+          '&:hover': { bgcolor: colores.azulFondo, borderColor: colores.azul },
+        }}
+      >
         Nueva conversación
       </Button>
       <List dense disablePadding sx={{ overflowY: 'auto', flex: 1 }}>

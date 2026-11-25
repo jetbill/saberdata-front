@@ -1,4 +1,5 @@
 import { Box, Paper, Typography } from '@mui/material'
+import { colores } from '../../app/theme'
 
 /** Presentacional: una burbuja de chat. El usuario a la derecha, el asistente a la izquierda. */
 export function BurbujaMensaje({
@@ -19,7 +20,8 @@ export function BurbujaMensaje({
           px: 2,
           py: 1.25,
           maxWidth: { xs: '92%', sm: '75%' },
-          bgcolor: esUsuario ? 'primary.main' : 'action.hover',
+          bgcolor: esUsuario ? 'primary.main' : colores.lateral,
+          border: esUsuario ? 0 : `1px solid ${colores.linea}`,
           color: esUsuario ? 'primary.contrastText' : 'text.primary',
           whiteSpace: 'pre-wrap',
           overflowWrap: 'anywhere',

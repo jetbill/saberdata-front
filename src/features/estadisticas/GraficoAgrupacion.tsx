@@ -1,7 +1,7 @@
 import { Alert, Box, Skeleton } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
 import { BarChart } from '@mui/x-charts/BarChart'
 import type { GrupoRendimiento } from '../../api/tipos'
+import { colores } from '../../app/theme'
 
 /**
  * Barras apiladas al 100 %: cuánto de cada grupo tiene rendimiento ALTO y BAJO.
@@ -18,16 +18,14 @@ export function GraficoAgrupacion({
   error?: string
   horizontal: boolean
 }) {
-  const theme = useTheme()
-
   if (error) return <Alert severity="error">{error}</Alert>
   if (cargando || !grupos) return <Skeleton variant="rounded" height={360} />
   if (grupos.length === 0) return <Alert severity="info">No hay datos para esta agrupación.</Alert>
 
   // El dataset de MUI X exige firma de índice; una copia plana la cumple sin tocar el DTO.
   const dataset = grupos.map((g) => ({ ...g }))
-  const colorAlto = theme.palette.success.main
-  const colorBajo = theme.palette.error.main
+  const colorAlto = colores.alto
+  const colorBajo = colores.bajo
   const alturaHorizontal = Math.max(360, grupos.length * 26 + 80)
 
   const series = [
