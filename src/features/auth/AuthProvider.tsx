@@ -49,19 +49,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(id)
   }, [claims, logout])
 
-  const login = useCallback(async (username: string, password: string) => {
-    const respuesta = await authApi.login(username, password)
+  const login = useCallback(async (username: string, password: string, captchaToken?: string) => {
+    const respuesta = await authApi.login(username, password, captchaToken)
     guardarToken(respuesta.accessToken)
     setToken(respuesta.accessToken)
   }, [])
 
-  const registrar = useCallback(
-    async (datos: DatosRegistro) => {
-      await authApi.registrar(datos)
-      await login(datos.username, datos.password)
-    },
-    [login],
-  )
+  const registrar = useCallback(async (datos: DatosRegistro) => {
+    await authApi.registrar(datos)
+  }, [])
 
   const valor = useMemo<AuthContextValor>(
     () => ({

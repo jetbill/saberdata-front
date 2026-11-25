@@ -3,10 +3,10 @@ import type { DatosRegistro, TokenRespuesta, Usuario } from '../../api/tipos'
 
 /** Capa de acceso a datos de autenticación: solo habla HTTP, no conoce React. */
 export const authApi = {
-  login: (username: string, password: string) =>
+  login: (username: string, password: string, captchaToken?: string) =>
     peticion<TokenRespuesta>('/api/auth/login', {
       method: 'POST',
-      body: { username, password },
+      body: { username, password, captchaToken },
       conAuth: false,
     }),
 

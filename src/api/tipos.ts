@@ -21,6 +21,8 @@ export interface DatosRegistro {
   username: string
   email: string
   password: string
+  /** Token de Cloudflare Turnstile; el backend lo exige si tiene el CAPTCHA activado. */
+  captchaToken?: string
 }
 
 export interface TokenRespuesta {

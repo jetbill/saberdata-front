@@ -10,8 +10,11 @@ export interface AuthContextValor {
   usuario: UsuarioSesion | null
   estaAutenticado: boolean
   esAdmin: boolean
-  login: (username: string, password: string) => Promise<void>
-  /** Crea la cuenta e inicia sesión con ella. */
+  login: (username: string, password: string, captchaToken?: string) => Promise<void>
+  /**
+   * Crea la cuenta, sin iniciar sesión: el token del CAPTCHA es de un solo uso y ya se gastó
+   * en el registro, así que el usuario entra después por la pantalla de login.
+   */
   registrar: (datos: DatosRegistro) => Promise<void>
   logout: () => void
 }

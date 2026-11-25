@@ -1,7 +1,10 @@
+import type { TurnstileInstance } from '@marsidev/react-turnstile'
 import { Alert, Box, Button, CircularProgress, Link, Stack, TextField, Typography } from '@mui/material'
-import { useState, type SubmitEventHandler } from 'react'
-import { Link as RouterLink } from 'react-router'
+import { useRef, useState, type SubmitEventHandler } from 'react'
+import { Link as RouterLink, useNavigate } from 'react-router'
 import { describirError } from '../../api/client'
+import { CampoCaptcha } from './CampoCaptcha'
+import { CAPTCHA_ACTIVO } from './captchaConfig'
 import { PaginaAuth } from './PaginaAuth'
 import { useAuth } from './useAuth'
 
@@ -34,6 +37,9 @@ export function RegisterPage() {
   const [intentado, setIntentado] = useState(false)
   const [error, setError] = useState<{ mensaje: string; detalles: string[] } | null>(null)
   const [enviando, setEnviando] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const captcha = useRef<TurnstileInstance>(null)
+  const navigate = useNavigate()
 
   const errores = validar(username.trim(), email.trim(), password, repetida)
   const mostrar = (campo: keyof typeof errores) => (intentado ? errores[campo] : undefined)
@@ -46,10 +52,20 @@ export function RegisterPage() {
 
     setEnviando(true)
     try {
-      await registrar({ username: username.trim(), email: email.trim(), password })
+      await registrar({
+        username: username.trim(),
+        email: email.trim(),
+        password,
+        captchaToken: captchaToken ?? undefined,
+      })
+      // El token del CAPTCHA ya se gastó: se entra por el login, que pide uno nuevo.
+      navigate('/login', { state: { registrado: username.trim() }, replace: true })
     } catch (e) {
       setError(describirError(e))
       setEnviando(false)
+      // El token de Turnstile es de un solo uso: hay que pedir uno nuevo para reintentar.
+      captcha.current?.reset()
+      setCaptchaToken(null)
     }
   }
 
@@ -109,11 +125,12 @@ export function RegisterPage() {
             autoComplete="new-password"
             required
           />
+          <CampoCaptcha onToken={setCaptchaToken} instancia={captcha} />
           <Button
             type="submit"
             variant="contained"
             size="large"
-            disabled={enviando}
+            disabled={enviando || (CAPTCHA_ACTIVO && !captchaToken)}
             startIcon={enviando ? <CircularProgress size={18} color="inherit" /> : undefined}
           >
             {enviando ? 'Creando cuenta…' : 'Registrarme'}

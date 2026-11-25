@@ -21,8 +21,12 @@ npm run dev        # http://localhost:5173
 | `npm run preview` | Sirve el resultado de `build` |
 | `npm run lint` | Análisis estático con oxlint |
 
-**Configuración:** `VITE_API_URL` (por defecto `http://localhost:8090`). Cópiala de `.env.example` a
-`.env.local` si necesitas cambiarla.
+**Configuración:** copia `.env.example` a `.env.local`.
+
+| Variable | Qué es |
+|---|---|
+| `VITE_API_URL` | URL de la API (por defecto `http://localhost:8090`) |
+| `VITE_TURNSTILE_SITE_KEY` | Clave **pública** de Cloudflare Turnstile para el CAPTCHA de login y registro. La de ejemplo es la de prueba (siempre aprueba). Vacía = sin widget (el backend debe tener `CAPTCHA_ENABLED=false`) |
 
 > El puerto `5173` es fijo (`strictPort`): el backend solo permite CORS desde ese origen
 > (`CORS_ALLOWED_ORIGINS`). Si está ocupado, Vite falla en vez de cambiar de puerto.
