@@ -52,6 +52,7 @@ src/
     ├── auth/             # login, registro, sesión, guardias de ruta
     ├── estadisticas/     # panel y gráficos
     ├── resultados/       # tabla paginada con filtros
+    ├── mineria/          # predicción con el modelo J48 de Weka y sus métricas
     ├── chat/             # asistente
     └── admin/            # usuarios (solo ADMIN)
 ```
@@ -87,5 +88,6 @@ Flujo de una pantalla de datos: `Page` → hook (`useXxx`, TanStack Query) → `
 | Marco con menú, rutas protegidas, rol ADMIN | Hecho |
 | Panel de estadísticas con gráficos | Hecho (KPIs, dona general, barras por 5 agrupaciones) |
 | Resultados (tabla con filtros y paginación) | Hecho |
+| Predicción (minería de datos, modelo J48) | Hecho (formulario, resultado, métricas, árbol; entrenar solo ADMIN) |
 | Chat con respuesta en tiempo real (SSE) | Hecho |
 | Usuarios (ADMIN) | Hecho (lista de solo lectura) |

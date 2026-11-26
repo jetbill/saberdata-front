@@ -120,6 +120,60 @@ export interface RespuestaChat {
   respuesta: string
 }
 
+// --- Minería de datos (modelo J48 de Weka) --------------------------------
+
+export interface MetricasClase {
+  precision: number
+  recall: number
+  f1: number
+}
+
+export interface MetricasModelo {
+  instancias: number
+  atributos: number
+  pliegues: number
+  minObj: number
+  exactitud: number
+  /** Exactitud de predecir siempre la clase mayoritaria: el mínimo que debe superar el modelo. */
+  exactitudBase: number
+  kappa: number
+  auc: number
+  alto: MetricasClase
+  bajo: MetricasClase
+  /** Filas = clase real, columnas = clase predicha, en el orden ALTO, BAJO. */
+  matrizConfusion: number[][]
+  hojas: number
+  tamanoArbol: number
+  segundos: number
+}
+
+export interface Modelo {
+  disponible: boolean
+  entrenadoEn: string | null
+  algoritmo: string | null
+  metricas: MetricasModelo | null
+}
+
+export interface AtributoModelo {
+  clave: string
+  etiqueta: string
+  valores: string[]
+}
+
+export interface Prediccion {
+  prediccion: Rendimiento
+  probabilidadAlto: number
+  probabilidadBajo: number
+  /** Atributos cuyo valor el modelo no conocía y se trataron como dato faltante. */
+  ignorados: string[]
+}
+
+export interface ArbolModelo {
+  texto: string
+  lineas: number
+  truncado: boolean
+}
+
 // --- Errores ---------------------------------------------------------------
 
 /** Formato uniforme de error que devuelve toda la API. */

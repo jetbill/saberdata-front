@@ -1,4 +1,5 @@
 import AdminIcon from '@mui/icons-material/AdminPanelSettings'
+import AutoGraphIcon from '@mui/icons-material/AutoGraphOutlined'
 import ChatIcon from '@mui/icons-material/ChatBubbleOutlined'
 import DashboardIcon from '@mui/icons-material/SpaceDashboardOutlined'
 import SchoolIcon from '@mui/icons-material/School'
@@ -19,6 +20,7 @@ interface ItemMenu {
 const ITEMS: ItemMenu[] = [
   { ruta: '/', etiqueta: 'Panel', icono: <DashboardIcon fontSize="small" /> },
   { ruta: '/resultados', etiqueta: 'Resultados', icono: <TableIcon fontSize="small" /> },
+  { ruta: '/prediccion', etiqueta: 'Predicción', icono: <AutoGraphIcon fontSize="small" /> },
   { ruta: '/chat', etiqueta: 'Asistente', icono: <ChatIcon fontSize="small" /> },
   { ruta: '/admin/usuarios', etiqueta: 'Usuarios', icono: <AdminIcon fontSize="small" />, soloAdmin: true },
 ]
